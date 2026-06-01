@@ -1579,6 +1579,10 @@
         <span class="brand-icon">🔍</span>
         <span class="brand-name">Google Pixel</span>
       </div>
+      <div class="brand-tile" onclick="filterByBrand('playstation')">
+        <span class="brand-icon">🎮</span>
+        <span class="brand-name">PlayStation</span>
+      </div>
     </div>
   </section>
 
@@ -2075,12 +2079,22 @@
 
     // ── BRAND FILTER ──
     let activeBrand = '';
+    // Brand keyword map — maps brand tile to search keywords
+    const BRAND_KEYWORDS = {
+      'apple':        ['apple', 'iphone', 'macbook', 'ipad', 'airpods', 'imac', 'mac'],
+      'samsung':      ['samsung', 'galaxy'],
+      'jbl':          ['jbl'],
+      'sony':         ['sony', 'xperia'],
+      'hp':           ['hp', 'hewlett'],
+      'dell':         ['dell', 'xps', 'inspiron', 'latitude'],
+      'google pixel': ['google', 'pixel'],
+      'playstation':  ['playstation', 'ps5', 'ps4', 'ps3', 'sony playstation'],
+    };
+
     function filterByBrand(brand) {
       activeBrand = brand;
-      // scroll to products
       document.getElementById('featured').scrollIntoView({ behavior: 'smooth' });
       applyAllFilters();
-      // update info
       document.getElementById('search-info').innerHTML =
         `Showing <span>${brand.charAt(0).toUpperCase()+brand.slice(1)}</span> products — <a href="#" onclick="clearBrand();return false;" style="color:var(--muted);font-size:0.7rem;">Clear</a>`;
     }
@@ -2099,8 +2113,12 @@
         if (activeTab === 'new' && !(text.includes('new') || (p.tag||'').toLowerCase().includes('new'))) return false;
         if (activeTab === 'bestseller' && !(p.tag||'').toLowerCase().includes('bestseller')) return false;
         if (activeTab === 'uk used' && !text.includes('uk used')) return false;
-        // brand
-        if (activeBrand && !text.includes(activeBrand)) return false;
+        // brand — check against keyword map
+        if (activeBrand) {
+          const keywords = BRAND_KEYWORDS[activeBrand] || [activeBrand];
+          const matches = keywords.some(kw => text.includes(kw));
+          if (!matches) return false;
+        }
         // search query
         if (searchQuery && !text.includes(searchQuery)) return false;
         // category chip
