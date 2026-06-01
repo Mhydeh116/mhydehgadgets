@@ -1848,22 +1848,17 @@
       if (!url) return '';
       url = url.trim();
 
-      // Already a direct Google Drive uc link — use as-is
-      if (url.includes('drive.google.com/uc')) return url;
+      // Extract Google Drive file ID from any Drive URL format
+      const fileMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) ||
+                        url.match(/id=([a-zA-Z0-9_-]+)/) ||
+                        url.match(/\/d\/([a-zA-Z0-9_-]+)/);
 
-      // Sharing link: https://drive.google.com/file/d/FILE_ID/view...
-      const match = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
-      if (match) {
-        return 'https://drive.google.com/uc?export=view&id=' + match[1];
+      if (fileMatch && url.includes('drive.google.com')) {
+        const fileId = fileMatch[1];
+        // Use thumbnail URL — this actually works cross-origin unlike uc?export=view
+        return 'https://drive.google.com/thumbnail?id=' + fileId + '&sz=w800';
       }
 
-      // open?id= format
-      const match2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-      if (match2) {
-        return 'https://drive.google.com/uc?export=view&id=' + match2[1];
-      }
-
-      // Return as-is for non-Drive URLs (e.g. direct image URLs)
       return url;
     }
 
