@@ -1229,6 +1229,131 @@
       .sell-steps { grid-template-columns: 1fr 1fr; }
     }
 
+
+    /* ── REVIEWS ── */
+    #reviews {
+      background: var(--ink);
+      padding: 6rem 4rem;
+    }
+    .reviews-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .overall-rating {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      margin: 2rem 0 3rem;
+      flex-wrap: wrap;
+    }
+    .rating-big {
+      font-family: var(--serif);
+      font-size: 5rem;
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .rating-stars { font-size: 1.5rem; letter-spacing: 4px; color: var(--gold); }
+    .rating-count { font-size: 0.8rem; color: var(--muted); margin-top: 0.3rem; }
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      margin-bottom: 4rem;
+    }
+    .review-card {
+      background: var(--ink-mid);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .review-stars { font-size: 0.9rem; letter-spacing: 3px; color: var(--gold); }
+    .review-text {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.8;
+      flex: 1;
+      font-style: italic;
+    }
+    .review-author {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-top: 0.5rem;
+    }
+    .review-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem;
+      color: var(--ink);
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+    .review-name { font-size: 0.8rem; color: var(--cream); font-weight: 400; }
+    .review-date { font-size: 0.65rem; color: var(--muted); }
+
+    /* Review Form */
+    .review-form-wrap {
+      max-width: 600px;
+      margin: 0 auto;
+      border: 1px solid rgba(232,48,42,0.2);
+      padding: 2.5rem;
+    }
+    .review-form-title {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: var(--cream);
+      margin-bottom: 0.3rem;
+    }
+    .review-form-title em { font-style: italic; color: var(--gold); }
+    .review-form-sub { font-size: 0.8rem; color: var(--muted); margin-bottom: 1.5rem; }
+    .star-picker {
+      display: flex;
+      gap: 0.3rem;
+      margin-bottom: 1.2rem;
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+    .star-picker span { transition: transform 0.15s; color: rgba(255,255,255,0.2); }
+    .star-picker span.active { color: var(--gold); }
+    .star-picker span:hover { transform: scale(1.2); }
+    .review-inputs { display: flex; flex-direction: column; gap: 1rem; }
+    .review-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .review-submit {
+      background: var(--gold);
+      color: #fff;
+      border: none;
+      padding: 1rem 2rem;
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 0.5rem;
+      transition: opacity 0.2s;
+    }
+    .review-submit:hover { opacity: 0.88; }
+    #review-response {
+      text-align: center;
+      font-size: 0.82rem;
+      margin-top: 1rem;
+      min-height: 1.2em;
+    }
+    @media (max-width: 768px) {
+      #reviews { padding: 4rem 1.2rem; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .review-row { grid-template-columns: 1fr; }
+      .review-form-wrap { padding: 1.5rem; }
+      .rating-big { font-size: 3.5rem; }
+    }
+
     /* ── WHATSAPP ── */
     .wa-float {
       position: fixed;
@@ -1308,11 +1433,11 @@
       </div>
       <div class="hero-stats">
         <div class="stat-item">
-          <div class="stat-num">500+</div>
+          <div class="stat-num">200+</div>
           <div class="stat-label">Products</div>
         </div>
         <div class="stat-item">
-          <div class="stat-num">10K+</div>
+          <div class="stat-num">500+</div>
           <div class="stat-label">Happy Clients</div>
         </div>
         <div class="stat-item">
@@ -1621,6 +1746,84 @@
           <p class="sell-step-title">Get Paid</p>
           <p class="sell-step-desc">Instant bank transfer or cash on the spot</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- REVIEWS -->
+  <section id="reviews">
+    <div class="reviews-header fade-in">
+      <p class="section-label">Customer Reviews</p>
+      <h2 class="section-title">What Our Customers <em>Say</em></h2>
+      <div class="overall-rating">
+        <div>
+          <div class="rating-big" id="avg-rating">5.0</div>
+          <div class="rating-stars">★★★★★</div>
+          <div class="rating-count" id="review-count">Based on our customers</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviews Grid -->
+    <div class="reviews-grid" id="reviews-grid">
+      <!-- Seed reviews -->
+      <div class="review-card fade-in">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Bought an iPhone 17 Pro Max and it was delivered same day. Packaging was perfect and the phone is 100% original. Mhydehgadgets is the best!"</p>
+        <div class="review-author">
+          <div class="review-avatar">AO</div>
+          <div>
+            <p class="review-name">Adebayo O.</p>
+            <p class="review-date">Lagos, Nigeria</p>
+          </div>
+        </div>
+      </div>
+      <div class="review-card fade-in">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Swapped my old Samsung for an iPhone and the process was so smooth. Fair pricing and very honest. I recommend Mhydehgadgets to everyone!"</p>
+        <div class="review-author">
+          <div class="review-avatar">CU</div>
+          <div>
+            <p class="review-name">Chioma U.</p>
+            <p class="review-date">Abuja, Nigeria</p>
+          </div>
+        </div>
+      </div>
+      <div class="review-card fade-in">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Got my MacBook Air M3 at the best price in Lagos. Legit seller, fast response on WhatsApp. Will definitely buy again!"</p>
+        <div class="review-author">
+          <div class="review-avatar">EM</div>
+          <div>
+            <p class="review-name">Emeka M.</p>
+            <p class="review-date">Lagos, Nigeria</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review Form -->
+    <div class="review-form-wrap fade-in">
+      <h3 class="review-form-title">Leave a <em>Review</em></h3>
+      <p class="review-form-sub">Had a great experience? Let others know!</p>
+
+      <div class="star-picker" id="star-picker">
+        <span onclick="setRating(1)">★</span>
+        <span onclick="setRating(2)">★</span>
+        <span onclick="setRating(3)">★</span>
+        <span onclick="setRating(4)">★</span>
+        <span onclick="setRating(5)">★</span>
+      </div>
+
+      <div class="review-inputs">
+        <div class="review-row">
+          <input type="text" class="sell-input" id="rv-name" placeholder="Your Name" />
+          <input type="text" class="sell-input" id="rv-location" placeholder="Your City (e.g. Lagos)" />
+        </div>
+        <textarea class="sell-textarea" id="rv-text" placeholder="Write your review here..." style="min-height:120px;"></textarea>
+        <button class="review-submit" onclick="submitReview()">Submit Review</button>
+        <p id="review-response"></p>
       </div>
     </div>
   </section>
@@ -2311,6 +2514,72 @@
         `Please let me know if this swap is possible. Thank you!`
       );
       window.open(`https://wa.me/${WA_SELL}?text=${msg}`, '_blank');
+    }
+  </script>
+
+
+  <script>
+    // ── REVIEWS ──
+    let selectedRating = 5;
+
+    // Set default 5 stars active on load
+    document.addEventListener('DOMContentLoaded', function() {
+      setRating(5);
+    });
+
+    function setRating(n) {
+      selectedRating = n;
+      document.querySelectorAll('#star-picker span').forEach((s, i) => {
+        s.classList.toggle('active', i < n);
+      });
+    }
+
+    function submitReview() {
+      const name = document.getElementById('rv-name').value.trim();
+      const location = document.getElementById('rv-location').value.trim();
+      const text = document.getElementById('rv-text').value.trim();
+      const responseEl = document.getElementById('review-response');
+
+      if (!name || !text) {
+        responseEl.style.color = '#E8302A';
+        responseEl.textContent = 'Please enter your name and review.';
+        return;
+      }
+
+      if (selectedRating === 0) {
+        responseEl.style.color = '#E8302A';
+        responseEl.textContent = 'Please select a star rating.';
+        return;
+      }
+
+      // Add review card to grid
+      const stars = '★'.repeat(selectedRating) + '☆'.repeat(5 - selectedRating);
+      const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+      const card = document.createElement('div');
+      card.className = 'review-card fade-in visible';
+      card.innerHTML = `
+        <div class="review-stars">${stars}</div>
+        <p class="review-text">"${text}"</p>
+        <div class="review-author">
+          <div class="review-avatar">${initials}</div>
+          <div>
+            <p class="review-name">${name}</p>
+            <p class="review-date">${location || 'Nigeria'}</p>
+          </div>
+        </div>`;
+
+      const grid = document.getElementById('reviews-grid');
+      grid.insertBefore(card, grid.firstChild);
+
+      // Clear form
+      document.getElementById('rv-name').value = '';
+      document.getElementById('rv-location').value = '';
+      document.getElementById('rv-text').value = '';
+      setRating(5);
+
+      responseEl.style.color = '#25D366';
+      responseEl.textContent = '✅ Thank you for your review!';
+      setTimeout(() => responseEl.textContent = '', 4000);
     }
   </script>
 
