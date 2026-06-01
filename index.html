@@ -1844,6 +1844,29 @@
       return '🛍️';
     }
 
+    function fixImageUrl(url) {
+      if (!url) return '';
+      url = url.trim();
+
+      // Already a direct Google Drive uc link — use as-is
+      if (url.includes('drive.google.com/uc')) return url;
+
+      // Sharing link: https://drive.google.com/file/d/FILE_ID/view...
+      const match = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if (match) {
+        return 'https://drive.google.com/uc?export=view&id=' + match[1];
+      }
+
+      // open?id= format
+      const match2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if (match2) {
+        return 'https://drive.google.com/uc?export=view&id=' + match2[1];
+      }
+
+      // Return as-is for non-Drive URLs (e.g. direct image URLs)
+      return url;
+    }
+
     function formatPrice(price) {
       if (!price) return '';
       const num = parseFloat(String(price).replace(/[^0-9.]/g, ''));
@@ -2152,7 +2175,7 @@
 
       if (p.image_url) {
         const img = document.createElement('img');
-        img.src = p.image_url;
+        img.src = fixImageUrl(p.image_url);
         img.alt = p.name;
         img.onerror = () => { img.remove(); document.getElementById('modal-emoji').style.display = 'flex'; };
         img.onload = () => { document.getElementById('modal-emoji').style.display = 'none'; };
