@@ -2137,8 +2137,15 @@
         const text = ((p.name || '') + ' ' + (p.category || '') + ' ' + (p.deal || '')).toLowerCase();
 
         // Filter chip
+        const FILTER_KEYWORDS = {
+          'smartphone': ['iphone', 'samsung', 'galaxy', 'smartphone', 'phone', 'pixel', 'tecno', 'infinix', 'android'],
+          'laptop': ['laptop', 'macbook', 'notebook', 'hp', 'dell', 'lenovo', 'asus', 'acer'],
+          'airpods': ['airpods', 'earbuds', 'headphone', 'earphone', 'buds', 'audio'],
+          'speaker': ['speaker', 'jbl', 'sonos', 'bose', 'soundbar'],
+        };
         if (activeFilter !== 'all' && activeFilter !== 'deal') {
-          if (!text.includes(activeFilter)) return false;
+          const filterKeys = FILTER_KEYWORDS[activeFilter] || [activeFilter];
+          if (!filterKeys.some(k => text.includes(k))) return false;
         }
         if (activeFilter === 'deal' && !p.deal) return false;
 
@@ -2231,8 +2238,15 @@
         // search query
         if (searchQuery && !text.includes(searchQuery)) return false;
         // category chip
+        const FILTER_KEYWORDS = {
+          'smartphone': ['iphone', 'samsung', 'galaxy', 'smartphone', 'phone', 'pixel', 'tecno', 'infinix', 'android'],
+          'laptop': ['laptop', 'macbook', 'notebook', 'hp', 'dell', 'lenovo', 'asus', 'acer'],
+          'airpods': ['airpods', 'earbuds', 'headphone', 'earphone', 'buds', 'audio'],
+          'speaker': ['speaker', 'jbl', 'sonos', 'bose', 'soundbar'],
+        };
         if (activeFilter !== 'all' && activeFilter !== 'deal') {
-          if (!text.includes(activeFilter)) return false;
+          const filterKeys = FILTER_KEYWORDS[activeFilter] || [activeFilter];
+          if (!filterKeys.some(k => text.includes(k))) return false;
         }
         if (activeFilter === 'deal' && !p.deal) return false;
         return true;
