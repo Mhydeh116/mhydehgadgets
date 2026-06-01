@@ -1918,13 +1918,20 @@
         const res = await fetch(SHEET_URL);
         const text = await res.text();
         const json = JSON.parse(text.replace(/^[^(]+\(/, '').replace(/\);?$/, ''));
-        const cols = json.table.cols.map(c => c.label.toLowerCase().replace(/\s+/g, '_'));
+        const cols = json.table.cols.map(c => c.label.toLowerCase().trim().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_'));
         const rows = json.table.rows.map(r => {
           const obj = {};
-          r.c.forEach((cell, i) => { obj[cols[i]] = cell ? cell.v : ''; });
+          r.c.forEach((cell, i) => {
+            if (cols[i]) obj[cols[i]] = cell ? (cell.v !== null && cell.v !== undefined ? String(cell.v) : '') : '';
+          });
+          // normalize common field aliases
+          if (!obj.image_url && obj.image) obj.image_url = obj.image;
+          if (!obj.old_price && obj.old_price_) obj.old_price = obj.old_price_;
+          if (!obj.description && obj.desc) obj.description = obj.desc;
           return obj;
-        }).filter(r => r.name);
+        }).filter(r => r.name && r.name.trim());
         statusEl.textContent = `${rows.length} products loaded`;
+        console.log('Sample row:', JSON.stringify(rows[0]));
         renderProducts(rows);
       } catch (e) {
         statusEl.textContent = 'Could not load sheet — showing demo';
