@@ -1412,15 +1412,6 @@
       <span class="marquee-item">Accessories</span><span class="marquee-dot">✦</span>
     </div>
   </div>
-
-
-
-  <!-- FLASH SALE BANNER -->
-  <div id="flash-banner">
-    <div class="flash-left">
-      <span class="flash-label">🔥 Flash Sale</span>
-      <span class="flash-title">One Time Deals — Limited Stock!</span>
-    </div>
     <div class="flash-countdown">
       <div class="countdown-block"><span class="countdown-num" id="cd-h">00</span><span class="countdown-lbl">Hrs</span></div>
       <span class="countdown-sep">:</span>
@@ -2059,21 +2050,6 @@
 
 
   <script>
-    // ── COUNTDOWN (resets daily at midnight) ──
-    function updateCountdown() {
-      const now = new Date();
-      const end = new Date();
-      end.setHours(23, 59, 59, 0);
-      const diff = end - now;
-      const h = Math.floor(diff / 3600000);
-      const m = Math.floor((diff % 3600000) / 60000);
-      const s = Math.floor((diff % 60000) / 1000);
-      document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
-      document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
-      document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
-    }
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
 
     // ── TAB FILTER ──
     let activeTab = 'all';
