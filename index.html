@@ -1354,6 +1354,46 @@
       .rating-big { font-size: 3.5rem; }
     }
 
+
+    /* ── PAGINATION ── */
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 3rem;
+      flex-wrap: wrap;
+    }
+    .page-btn {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      padding: 0.6rem 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-width: 40px;
+    }
+    .page-btn:hover { border-color: var(--gold); color: var(--cream); }
+    .page-btn.active { background: var(--gold); border-color: var(--gold); color: #fff; }
+    .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .page-btn.prev-next {
+      padding: 0.6rem 1.4rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+    }
+    .page-info {
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 1rem;
+      letter-spacing: 0.05em;
+    }
+    .page-info span { color: var(--gold); }
+
     /* ── WHATSAPP ── */
     .wa-float {
       position: fixed;
@@ -1546,6 +1586,10 @@
       <h3>No gadgets found</h3>
       <p>Try a different search term or browse all categories</p>
     </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="pagination"></div>
+    <p class="page-info" id="page-info"></p>
 
     <!-- Hot Deals Banner -->
     <div id="deals-section" style="display:none; margin-top:4rem;">
@@ -2075,23 +2119,82 @@
       }
     }
 
+    const ITEMS_PER_PAGE = 20;
+    let currentPage = 1;
+    let currentProducts = [];
+
     function renderProducts(products) {
+      currentProducts = products;
+      currentPage = 1;
+      renderPage();
+    }
+
+    function renderPage() {
       const grid = document.getElementById('products-grid');
       const dealsGrid = document.getElementById('deals-grid');
       const dealsSection = document.getElementById('deals-section');
+      const pagination = document.getElementById('pagination');
+      const pageInfo = document.getElementById('page-info');
 
-      const featured = products.filter(p => !p.deal || p.deal.toLowerCase() !== 'deal only');
-      const deals = products.filter(p => p.deal);
+      const featured = currentProducts.filter(p => !p.deal || p.deal.toLowerCase() !== 'deal only');
+      const deals = currentProducts.filter(p => p.deal);
 
-      grid.innerHTML = featured.map((p, i) => buildCard(p, i === 0)).join('');
+      // Paginate featured products
+      const totalPages = Math.ceil(featured.length / ITEMS_PER_PAGE);
+      const start = (currentPage - 1) * ITEMS_PER_PAGE;
+      const end = start + ITEMS_PER_PAGE;
+      const pageItems = featured.slice(start, end);
 
+      grid.innerHTML = pageItems.map(p => buildCard(p)).join('');
+
+      // Deals section (always show all deals)
       if (deals.length > 0) {
         dealsGrid.innerHTML = deals.map(p => buildCard(p)).join('');
         dealsSection.style.display = 'block';
+      } else {
+        dealsSection.style.display = 'none';
+      }
+
+      // Render pagination
+      if (totalPages > 1) {
+        let html = '';
+        html += `<button class="page-btn prev-next" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>← Prev</button>`;
+
+        for (let i = 1; i <= totalPages; i++) {
+          if (
+            i === 1 || i === totalPages ||
+            (i >= currentPage - 1 && i <= currentPage + 1)
+          ) {
+            html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+          } else if (i === currentPage - 2 || i === currentPage + 2) {
+            html += `<span style="color:var(--muted);padding:0 0.3rem;">...</span>`;
+          }
+        }
+
+        html += `<button class="page-btn prev-next" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Next →</button>`;
+        pagination.innerHTML = html;
+        pagination.style.display = 'flex';
+
+        pageInfo.innerHTML = `Showing <span>${start + 1}–${Math.min(end, featured.length)}</span> of <span>${featured.length}</span> products`;
+        pageInfo.style.display = 'block';
+      } else {
+        pagination.innerHTML = '';
+        pagination.style.display = 'none';
+        pageInfo.style.display = 'none';
       }
 
       // Re-run fade-in observer on new cards
       document.querySelectorAll('.fade-in:not(.visible)').forEach(el => observer.observe(el));
+    }
+
+    function goToPage(page) {
+      const featured = currentProducts.filter(p => !p.deal || p.deal.toLowerCase() !== 'deal only');
+      const totalPages = Math.ceil(featured.length / ITEMS_PER_PAGE);
+      if (page < 1 || page > totalPages) return;
+      currentPage = page;
+      renderPage();
+      // Scroll to top of products section
+      document.getElementById('featured').scrollIntoView({ behavior: 'smooth' });
     }
 
     loadProducts();
